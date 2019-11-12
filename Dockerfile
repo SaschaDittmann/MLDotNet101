@@ -48,7 +48,7 @@ RUN mkdir -p /scisharp/kernel-spec \
 && mv kernel-docker.json kernel.json \
 && wget https://raw.githubusercontent.com/SciSharp/ICSharpCore/master/kernel-spec/logo-32x32.png \
 && wget https://raw.githubusercontent.com/SciSharp/ICSharpCore/master/kernel-spec/logo-64x64.png \
-&& echo -e '#r "nuget: TensorFlow.NET, 0.10.10"\n#r "nuget: PlotNET, 0.1.6"' > /scisharp/refs.txt \
+&& echo '#r "nuget: TensorFlow.NET, 0.10.10"\n#r "nuget: PlotNET, 0.1.6"' > /scisharp/refs.txt \
 && jupyter kernelspec install /scisharp/kernel-spec --name=csharpcore
 
 # Install ICSharpCore libraries
