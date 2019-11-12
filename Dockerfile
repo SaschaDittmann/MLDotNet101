@@ -43,6 +43,25 @@ ENV DOTNET_RUNNING_IN_CONTAINER=true \
     NUGET_XMLDOC_MODE=skip
 
 RUN chown -R ${NB_UID} ${HOME}
+
+# Install ICSharpCore
+RUN dotnet tool install -g ICSharpCore \
+&& mkdir -p /opt/scisharp/kernel-spec \
+&& cd /opt/scisharp/kernel-spec \
+&& wget https://raw.githubusercontent.com/SciSharp/ICSharpCore/master/kernel-spec/kernel-docker.json \
+&& mv kernel-docker.json kernel.json \
+&& wget https://raw.githubusercontent.com/SciSharp/ICSharpCore/master/kernel-spec/logo-32x32.png \
+&& wget https://raw.githubusercontent.com/SciSharp/ICSharpCore/master/kernel-spec/logo-64x64.png \
+&& jupyter kernelspec install /opt/scisharp/kernel-spec --name=csharpcore
+
+# Install ICSharpCore libraries
+RUN mkdir -p /opt/scisharp/lib \
+&& cd /opt/scisharp/lib \
+&& wget https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-linux-x86_64-1.14.0.tar.gz \
+&& tar -C /usr/local -xzf libtensorflow-cpu-linux-x86_64-1.14.0.tar.gz \
+&& rm libtensorflow-cpu-linux-x86_64-1.14.0.tar.gz \
+&& ldconfig
+
 USER jovyan
 
 ENV PATH="${PATH}:${HOME}/.dotnet/tools"
@@ -51,6 +70,7 @@ ENV PATH="${PATH}:${HOME}/.dotnet/tools"
 RUN dotnet tool install -g dotnet-try \
 && dotnet try jupyter install
 
+# Install Microsoft ML .NET CLI
 RUN dotnet tool install -g mlnet
 
 ADD notebooks ${HOME}/Notebooks
