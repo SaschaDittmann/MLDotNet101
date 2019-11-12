@@ -44,19 +44,18 @@ ENV DOTNET_RUNNING_IN_CONTAINER=true \
 
 RUN chown -R ${NB_UID} ${HOME}
 
-# Install ICSharpCore
-RUN dotnet tool install -g ICSharpCore \
-&& mkdir -p /opt/scisharp/kernel-spec \
-&& cd /opt/scisharp/kernel-spec \
+RUN mkdir -p /scisharp/kernel-spec \
+&& cd /scisharp/kernel-spec \
 && wget https://raw.githubusercontent.com/SciSharp/ICSharpCore/master/kernel-spec/kernel-docker.json \
 && mv kernel-docker.json kernel.json \
 && wget https://raw.githubusercontent.com/SciSharp/ICSharpCore/master/kernel-spec/logo-32x32.png \
 && wget https://raw.githubusercontent.com/SciSharp/ICSharpCore/master/kernel-spec/logo-64x64.png \
-&& jupyter kernelspec install /opt/scisharp/kernel-spec --name=csharpcore
+&& echo '#r "nuget: TensorFlow.NET, 0.10.10"' > /scisharp/refs.txt \
+&& jupyter kernelspec install /scisharp/kernel-spec --name=csharpcore
 
 # Install ICSharpCore libraries
-RUN mkdir -p /opt/scisharp/lib \
-&& cd /opt/scisharp/lib \
+RUN mkdir -p /scisharp/lib \
+&& cd /scisharp/lib \
 && wget https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-linux-x86_64-1.14.0.tar.gz \
 && tar -C /usr/local -xzf libtensorflow-cpu-linux-x86_64-1.14.0.tar.gz \
 && rm libtensorflow-cpu-linux-x86_64-1.14.0.tar.gz \
@@ -72,6 +71,9 @@ RUN dotnet tool install -g dotnet-try \
 
 # Install Microsoft ML .NET CLI
 RUN dotnet tool install -g mlnet
+
+# Install ICSharpCore
+RUN dotnet tool install -g ICSharpCore 
 
 ADD notebooks ${HOME}/Notebooks
 
