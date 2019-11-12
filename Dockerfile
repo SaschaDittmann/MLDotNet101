@@ -75,5 +75,9 @@ RUN dotnet tool install -g mlnet
 
 ADD notebooks ${HOME}/Notebooks
 
+USER root
+RUN chown -R ${NB_UID} ${HOME}/Notebooks
+USER jovyan
+
 # Set root to Notebooks
 WORKDIR ${HOME}/Notebooks
