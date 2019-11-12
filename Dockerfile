@@ -27,7 +27,7 @@ RUN apt-get update \
 && dpkg -i packages-microsoft-prod.deb \
 && apt-get update \
 && apt-get install -y --no-install-recommends \
-	dotnet-sdk-2.1 dotnet-sdk-3.0 \
+	dotnet-sdk-2.1 dotnet-sdk-2.2 dotnet-sdk-3.0 \
 && rm -rf /tmp/* \
     && apt-get autoremove -y \
     && apt-get autoclean -y \
