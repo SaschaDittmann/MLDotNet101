@@ -42,8 +42,6 @@ ENV DOTNET_RUNNING_IN_CONTAINER=true \
     # Skip extraction of XML docs - generally not useful within an image/container - helps performance
     NUGET_XMLDOC_MODE=skip
 
-RUN chown -R ${NB_UID} ${HOME}
-
 RUN mkdir -p /scisharp/kernel-spec \
 && cd /scisharp/kernel-spec \
 && wget https://raw.githubusercontent.com/SciSharp/ICSharpCore/master/kernel-spec/kernel-docker.json \
@@ -60,6 +58,8 @@ RUN mkdir -p /scisharp/lib \
 && tar -C /usr/local -xzf libtensorflow-cpu-linux-x86_64-1.14.0.tar.gz \
 && rm libtensorflow-cpu-linux-x86_64-1.14.0.tar.gz \
 && ldconfig
+
+RUN chown -R ${NB_UID} ${HOME}
 
 USER jovyan
 
